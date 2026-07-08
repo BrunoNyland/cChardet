@@ -13,14 +13,10 @@ classifiers = [
     'Programming Language :: Python',
     'Topic :: Software Development :: Libraries',
     'Programming Language :: Python :: 3',
-    'Programming Language :: Python :: 3.9',
-    'Programming Language :: Python :: 3.10',
-    'Programming Language :: Python :: 3.11',
-    'Programming Language :: Python :: 3.12',
     'Programming Language :: Python :: 3.13',
     'Programming Language :: Python :: 3.14',
 ]
-requires-python = ">= 3.9"
+requires-python = ">= 3.13"
 dynamic = ["version"]
 
 [build-system]
@@ -45,13 +41,13 @@ dev-dependencies = [
 [tool.ruff]
 exclude = ["src/ext"]
 line-length = 100
-target-version = "py39"
+target-version = "py313"
 lint.select = ["E", "F", "I", "N"]
 format.quote-style = "double"
 format.indent-style = "space"
 
 [tool.cibuildwheel]
-skip = "pp* cp36-* cp37-* cp38-*"
+skip = "pp* cp36-* cp37-* cp38-* cp39-* cp310-* cp311-* cp312-*"
 archs = "auto"
 before-build = [
     "pip install cython==3.2.6",

@@ -44,10 +44,10 @@ There is no typecheck step configured.
 
 ## CI / release
 
-- `.github/workflows/test.yml`: matrix over Python 3.9-3.14 on ubuntu/windows/macos. Flow: checkout with `submodules: recursive` -> install dev reqs -> `make cython` -> `pip install .` -> `ruff check` -> `pytest -vs tests`.
+- `.github/workflows/test.yml`: matrix over Python 3.13-3.14 on ubuntu/windows/macos. Flow: checkout with `submodules: recursive` -> install dev reqs -> `make cython` -> `pip install .` -> `ruff check` -> `pytest -vs tests`.
 - `.github/workflows/release.yaml`: on every push to master, auto-bumps the alpha version (`tools/bump_version.py`), commits + tags `v<X.Y.ZaN>` (with `[skip ci]` to avoid loop), builds wheels via cibuildwheel v4.1.0 across ubuntu/windows/macos, and publishes a GitHub Release with all wheel artifacts. Also triggers on manual dispatch.
 - **Wheel builds do not run tests** -- the cibuildwheel `test-command` is intentionally disabled (see comment in `pyproject.toml`) because some detection cases fail inside the cibuildwheel environment. Don't re-enable without fixing those cases.
 - cibuildwheel v4.1.0 builds CPython 3.14 (and free-threaded `cp314t`) by default; uchardet free-threading safety is not audited.
-- Supported Python: `>=3.9`-`3.14` (3.14 included in CI; `allow-prereleases` retained for future 3.15-dev).
+- Supported Python: `>=3.13`-`3.14` (3.14 included in CI; `allow-prereleases` retained for future 3.15-dev).
 - C++ standard: the extension compiles with `-std=c++14` (set in `setup.py` `extra_compile_args`). Don't downgrade to c++11 -- cChardet requires c++14 features.
 - Version source: `src/cchardet/__init__.py` defines both `version` (tuple) and `__version__` (string). `pyproject.toml` reads `cchardet.__version__` dynamically. `tools/bump_version.py` increments the alpha segment and updates both.

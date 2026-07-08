@@ -14,7 +14,7 @@ A C++-powered drop-in alternative to [chardet](https://github.com/chardet/charde
 pip install cchardet
 ```
 
-Pre-built wheels are available for Python 3.9-3.14 (including free-threaded 3.14t) on Linux, macOS, and Windows. See [Releases](https://github.com/BrunoNyland/cChardet/releases).
+Pre-built wheels are available for Python 3.13-3.14 (including free-threaded 3.14t) on Linux, macOS, and Windows. See [Releases](https://github.com/BrunoNyland/cChardet/releases).
 
 ## Usage
 
