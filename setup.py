@@ -3,6 +3,7 @@
 
 import glob
 import os
+import sys
 
 from setuptools import Extension, setup
 
@@ -76,6 +77,11 @@ uchardet_sources = [
 ]
 sources += uchardet_sources
 
+if sys.platform == "win32":
+    extra_compile_args = ["/std:c++14"]
+else:
+    extra_compile_args = ["-std=c++14"]
+
 setup(
     package_dir={"": "src"},
     packages=[
@@ -87,7 +93,7 @@ setup(
             sources=sources,
             include_dirs=[uchardet_dir],
             language="c++",
-            extra_compile_args=['-std=c++14'],
+            extra_compile_args=extra_compile_args,
         )
     ],
 )
