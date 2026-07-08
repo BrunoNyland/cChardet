@@ -15,11 +15,26 @@ A C++-powered drop-in alternative to [chardet](https://github.com/chardet/charde
 
 ## Install
 
+From PyPI:
+
 ```bash
 pip install cchardet
 ```
 
-Pre-built wheels are available for Python 3.13-3.14 (including free-threaded 3.14t) on Linux, macOS, and Windows. See [Releases](https://github.com/BrunoNyland/cChardet/releases).
+From the latest GitHub release -- download the `.whl` matching your Python version and platform from [Releases](https://github.com/BrunoNyland/cChardet/releases/latest), then:
+
+```bash
+pip install cchardet-*.whl
+```
+
+Or with the GitHub CLI:
+
+```bash
+gh release download --repo BrunoNyland/cChardet --pattern "*cp313*manylinux*x86_64*.whl"
+pip install cchardet-*.whl
+```
+
+Pre-built wheels are available for Python 3.13-3.14 (including free-threaded 3.14t) on Linux, macOS, and Windows.
 
 ## Usage
 
