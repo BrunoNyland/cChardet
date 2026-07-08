@@ -4,7 +4,7 @@
 [![Tests](https://github.com/BrunoNyland/cChardet/actions/workflows/test.yml/badge.svg)](https://github.com/BrunoNyland/cChardet/actions/workflows/test.yml)
 [![Release](https://github.com/BrunoNyland/cChardet/actions/workflows/release.yaml/badge.svg)](https://github.com/BrunoNyland/cChardet/actions/workflows/release.yaml)
 
-High-speed universal character encoding detector — a Python binding to [uchardet](https://github.com/PyYoshi/uchardet), built with [Cython](https://cython.org/).
+High-speed universal character encoding detector -- a Python binding to [uchardet](https://github.com/PyYoshi/uchardet), built with [Cython](https://cython.org/).
 
 A C++-powered drop-in alternative to [chardet](https://github.com/chardet/chardet), offering **~2000x** faster detection.
 
@@ -14,7 +14,7 @@ A C++-powered drop-in alternative to [chardet](https://github.com/chardet/charde
 pip install cchardet
 ```
 
-Pre-built wheels are available for Python 3.9–3.14 (including free-threaded 3.14t) on Linux, macOS, and Windows. See [Releases](https://github.com/BrunoNyland/cChardet/releases).
+Pre-built wheels are available for Python 3.9-3.14 (including free-threaded 3.14t) on Linux, macOS, and Windows. See [Releases](https://github.com/BrunoNyland/cChardet/releases).
 
 ## Usage
 
@@ -66,13 +66,13 @@ make bench
 
 ## How it works
 
-- **[uchardet](https://github.com/PyYoshi/uchardet)** — C++ charset detector (Mozilla-derived), the encoding engine.
-- **cChardet** — Cython binding that exposes `detect()` and `UniversalDetector` to Python.
-- **[chardet](https://github.com/chardet/chardet)** — pure-Python detector used as the benchmark baseline; cChardet is API-compatible as a drop-in replacement.
+- **[uchardet](https://github.com/PyYoshi/uchardet)** -- C++ charset detector (Mozilla-derived), the encoding engine.
+- **cChardet** -- Cython binding that exposes `detect()` and `UniversalDetector` to Python.
+- **[chardet](https://github.com/chardet/chardet)** -- pure-Python detector used as the benchmark baseline; cChardet is API-compatible as a drop-in replacement.
 
 ## Supported encodings
 
-UTF-8, UTF-16BE/LE, UTF-32BE/LE, ISO-8859-1 through -16, WINDOWS-1250 through -1257, BIG5, EUC-JP/ KR/ TW, GB18030, HZ-GB-2312, ISO-2022-JP/ KR/ CN, SHIFT_JIS, KOI8-R, and more — covering 30+ languages.
+UTF-8, UTF-16BE/LE, UTF-32BE/LE, ISO-8859-1 through -16, WINDOWS-1250 through -1257, BIG5, EUC-JP/ KR/ TW, GB18030, HZ-GB-2312, ISO-2022-JP/ KR/ CN, SHIFT_JIS, KOI8-R, and more -- covering 30+ languages.
 
 ## License
 

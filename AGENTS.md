@@ -8,24 +8,24 @@ cChardet is a Python binding to the C++ [uchardet](https://github.com/PyYoshi/uc
 
 ## First-time setup
 
-- `git submodule update --init --recursive` — **required**. The build compiles C++ from `src/ext/uchardet/`, and the test suite globs `src/ext/uchardet/test/*/*.txt` for fixtures. Without the submodule, both build and tests fail.
-- `pip install -r requirements-dev.txt` — cython, pytest, ruff, setuptools, chardet (used by `bench.py`).
+- `git submodule update --init --recursive` -- **required**. The build compiles C++ from `src/ext/uchardet/`, and the test suite globs `src/ext/uchardet/test/*/*.txt` for fixtures. Without the submodule, both build and tests fail.
+- `pip install -r requirements-dev.txt` -- cython, pytest, ruff, setuptools, chardet (used by `bench.py`).
 
 ## Build / test commands
 
-The extension must be cythonized to C++ before it can be compiled. The flow is: **cythonize → build_ext → test**.
+The extension must be cythonized to C++ before it can be compiled. The flow is: **cythonize -> build_ext -> test**.
 
-- `make cython` — `cython --cplus src/cchardet/_cchardet.pyx` → generates `src/cchardet/_cchardet.cpp`.
-- `python setup.py build_ext -i -f` — compiles the Cython-generated C++ plus the uchardet sources listed in `setup.py` into `_cchardet*.so` in place.
-- `make test` — runs `clean → cython → build_ext → pytest tests`. Note: `make clean` deletes `src/cchardet/*.cpp`, so after any `make clean` you must re-cythonize before building.
-- `pytest tests` — run the suite after building.
-- `pytest tests/test_1.py::TestCChardet::test_ascii` — single test.
-- `make bench` — `clean → cython → build_ext → python tests/bench.py` (compares throughput vs `chardet`).
+- `make cython` -- `cython --cplus src/cchardet/_cchardet.pyx` -> generates `src/cchardet/_cchardet.cpp`.
+- `python setup.py build_ext -i -f` -- compiles the Cython-generated C++ plus the uchardet sources listed in `setup.py` into `_cchardet*.so` in place.
+- `make test` -- runs `clean -> cython -> build_ext -> pytest tests`. Note: `make clean` deletes `src/cchardet/*.cpp`, so after any `make clean` you must re-cythonize before building.
+- `pytest tests` -- run the suite after building.
+- `pytest tests/test_1.py::TestCChardet::test_ascii` -- single test.
+- `make bench` -- `clean -> cython -> build_ext -> python tests/bench.py` (compares throughput vs `chardet`).
 
 ## Lint / format
 
 - `ruff check` / `ruff format`. Config in `pyproject.toml`: line length 100, target py39, double quotes, selects `E,F,I,N`.
-- `src/ext` (the submodule) is excluded from ruff — do not lint or reformat it.
+- `src/ext` (the submodule) is excluded from ruff -- do not lint or reformat it.
 
 There is no typecheck step configured.
 
@@ -39,15 +39,15 @@ There is no typecheck step configured.
 ## Test gotchas
 
 - Test fixtures come from the **submodule** (`src/ext/uchardet/test/<lang>/<encoding>.txt`), not `tests/samples/`. `tests/samples/` only holds a few hand-picked files (e.g. the SJIS Wikipedia sample used by `test_detector` and `bench.py`).
-- `tests/test_1.py` has `SKIP_LIST_DETECT` / `SKIP_LIST_DEC` for encodings known to misdetect (gb18030, ja/utf-16le/be, es/iso-8859-15, da/iso-8859-1, he/iso-8859-8, plus a few Python-undecodable ones). These skips are intentional — don't remove them without investigating the underlying detection.
-- Expected encoding is derived from each fixture's filename (e.g. `ja/shift_jis.txt` → `shift_jis`) and compared case-insensitively.
+- `tests/test_1.py` has `SKIP_LIST_DETECT` / `SKIP_LIST_DEC` for encodings known to misdetect (gb18030, ja/utf-16le/be, es/iso-8859-15, da/iso-8859-1, he/iso-8859-8, plus a few Python-undecodable ones). These skips are intentional -- don't remove them without investigating the underlying detection.
+- Expected encoding is derived from each fixture's filename (e.g. `ja/shift_jis.txt` -> `shift_jis`) and compared case-insensitively.
 
 ## CI / release
 
-- `.github/workflows/test.yml`: matrix over Python 3.9–3.14 on ubuntu/windows/macos. Flow: checkout with `submodules: recursive` → install dev reqs → `make cython` → `pip install .` → `ruff check` → `pytest -vs tests`.
+- `.github/workflows/test.yml`: matrix over Python 3.9-3.14 on ubuntu/windows/macos. Flow: checkout with `submodules: recursive` -> install dev reqs -> `make cython` -> `pip install .` -> `ruff check` -> `pytest -vs tests`.
 - `.github/workflows/release.yaml`: on every push to master, auto-bumps the alpha version (`tools/bump_version.py`), commits + tags `v<X.Y.ZaN>` (with `[skip ci]` to avoid loop), builds wheels via cibuildwheel v4.1.0 across ubuntu/windows/macos, and publishes a GitHub Release with all wheel artifacts. Also triggers on manual dispatch.
-- **Wheel builds do not run tests** — the cibuildwheel `test-command` is intentionally disabled (see comment in `pyproject.toml`) because some detection cases fail inside the cibuildwheel environment. Don't re-enable without fixing those cases.
+- **Wheel builds do not run tests** -- the cibuildwheel `test-command` is intentionally disabled (see comment in `pyproject.toml`) because some detection cases fail inside the cibuildwheel environment. Don't re-enable without fixing those cases.
 - cibuildwheel v4.1.0 builds CPython 3.14 (and free-threaded `cp314t`) by default; uchardet free-threading safety is not audited.
-- Supported Python: `>=3.9`–`3.14` (3.14 included in CI; `allow-prereleases` retained for future 3.15-dev).
-- C++ standard: the extension compiles with `-std=c++14` (set in `setup.py` `extra_compile_args`). Don't downgrade to c++11 — cChardet requires c++14 features.
+- Supported Python: `>=3.9`-`3.14` (3.14 included in CI; `allow-prereleases` retained for future 3.15-dev).
+- C++ standard: the extension compiles with `-std=c++14` (set in `setup.py` `extra_compile_args`). Don't downgrade to c++11 -- cChardet requires c++14 features.
 - Version source: `src/cchardet/__init__.py` defines both `version` (tuple) and `__version__` (string). `pyproject.toml` reads `cchardet.__version__` dynamically. `tools/bump_version.py` increments the alpha segment and updates both.

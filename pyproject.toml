@@ -58,6 +58,6 @@ before-build = [
     "cython {project}/src/cchardet/_cchardet.pyx",
 ]
 
-# NOTICE: ローカルでは想定通りにテストは通るが､ cibuildwheel では 特定のファイルの文字コード検知がうまくいかないので一時的に無効化する
+# NOTICE: Tests pass locally but some detection cases fail inside cibuildwheel, so tests are temporarily disabled
 # test-requires = "pytest"
 # test-command = "pytest -vs {project}/tests"
