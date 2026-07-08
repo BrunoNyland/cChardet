@@ -9,6 +9,15 @@ from setuptools import Extension, setup
 
 cchardet_dir = "src/cchardet/"
 uchardet_dir = "src/ext/uchardet/src"
+
+pyx_source = os.path.join(cchardet_dir, "_cchardet.pyx")
+cpp_source = os.path.join(cchardet_dir, "_cchardet.cpp")
+
+if not os.path.exists(cpp_source):
+    from Cython.Build import cythonize
+
+    cythonize(pyx_source, language="c++")
+
 cchardet_sources = glob.glob(cchardet_dir + "*.cpp")
 sources = cchardet_sources
 

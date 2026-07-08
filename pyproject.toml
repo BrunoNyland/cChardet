@@ -24,7 +24,7 @@ requires-python = ">= 3.9"
 dynamic = ["version"]
 
 [build-system]
-requires = ["setuptools", "Cython", "wheel"]
+requires = ["setuptools", "Cython>=3.2.6", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project.scripts]
