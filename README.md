@@ -1,185 +1,86 @@
-cChardet
-========
+# cChardet
 
 [![PyPI version](https://badge.fury.io/py/cchardet.svg)](https://badge.fury.io/py/cchardet)
-[![Run tests](https://github.com/PyYoshi/cChardet/actions/workflows/test.yml/badge.svg)](https://github.com/PyYoshi/cChardet/actions/workflows/test.yml)
-[![Build Wheels](https://github.com/PyYoshi/cChardet/actions/workflows/build.yaml/badge.svg)](https://github.com/PyYoshi/cChardet/actions/workflows/build.yaml)
+[![Tests](https://github.com/BrunoNyland/cChardet/actions/workflows/test.yml/badge.svg)](https://github.com/BrunoNyland/cChardet/actions/workflows/test.yml)
+[![Release](https://github.com/BrunoNyland/cChardet/actions/workflows/release.yaml/badge.svg)](https://github.com/BrunoNyland/cChardet/actions/workflows/release.yaml)
 
-cChardet is high speed universal character encoding detector. - binding to [uchardet](https://github.com/PyYoshi/uchardet).
+High-speed universal character encoding detector — a Python binding to [uchardet](https://github.com/PyYoshi/uchardet), built with [Cython](https://cython.org/).
 
-## Supported Languages/Encodings
+A C++-powered drop-in alternative to [chardet](https://github.com/chardet/chardet), offering **~2000x** faster detection.
 
-- International (Unicode)
-  - UTF-8
-  - UTF-16BE / UTF-16LE
-  - UTF-32BE / UTF-32LE / X-ISO-10646-UCS-4-34121 / X-ISO-10646-UCS-4-21431
-- Arabic
-  - ISO-8859-6
-  - WINDOWS-1256
-- Bulgarian
-  - ISO-8859-5
-  - WINDOWS-1251
-- Chinese
-  - ISO-2022-CN
-  - BIG5
-  - EUC-TW
-  - GB18030
-  - HZ-GB-2312
-- Croatian:
-  - ISO-8859-2
-  - ISO-8859-13
-  - ISO-8859-16
-  - Windows-1250
-  - IBM852
-  - MAC-CENTRALEUROPE
-- Czech
-  - Windows-1250
-  - ISO-8859-2
-  - IBM852
-  - MAC-CENTRALEUROPE
-- Danish
-  - ISO-8859-1
-  - ISO-8859-15
-  - WINDOWS-1252
-- English
-  - ASCII
-- Esperanto
-  - ISO-8859-3
-- Estonian
-  - ISO-8859-4
-  - ISO-8859-13
-  - ISO-8859-13
-  - Windows-1252
-  - Windows-1257
-- Finnish
-  - ISO-8859-1
-  - ISO-8859-4
-  - ISO-8859-9
-  - ISO-8859-13
-  - ISO-8859-15
-  - WINDOWS-1252
-- French
-  - ISO-8859-1
-  - ISO-8859-15
-  - WINDOWS-1252
-- German
-  - ISO-8859-1
-  - WINDOWS-1252
-- Greek
-  - ISO-8859-7
-  - WINDOWS-1253
-- Hebrew
-  - ISO-8859-8
-  - WINDOWS-1255
-- Hungarian:
-  - ISO-8859-2
-  - WINDOWS-1250
-- Irish Gaelic
-  - ISO-8859-1
-  - ISO-8859-9
-  - ISO-8859-15
-  - WINDOWS-1252
-- Italian
-  - ISO-8859-1
-  - ISO-8859-3
-  - ISO-8859-9
-  - ISO-8859-15
-  - WINDOWS-1252
-- Japanese
-  - ISO-2022-JP
-  - SHIFT_JIS
-  - EUC-JP
-- Korean
-  - ISO-2022-KR
-  - EUC-KR / UHC
-- Lithuanian
-  - ISO-8859-4
-  - ISO-8859-10
-  - ISO-8859-13
-- Latvian
-  - ISO-8859-4
-  - ISO-8859-10
-  - ISO-8859-13
-- Maltese
-  - ISO-8859-3
-- Polish:
-  - ISO-8859-2
-  - ISO-8859-13
-  - ISO-8859-16
-  - Windows-1250
-  - IBM852
-  - MAC-CENTRALEUROPE
-- Portuguese
-  - ISO-8859-1
-  - ISO-8859-9
-  - ISO-8859-15
-  - WINDOWS-1252
-- Romanian:
-  - ISO-8859-2
-  - ISO-8859-16
-  - Windows-1250
-  - IBM852
-- Russian
-  - ISO-8859-5
-  - KOI8-R
-  - WINDOWS-1251
-  - MAC-CYRILLIC
-  - IBM866
-  - IBM855
-- Slovak
-  - Windows-1250
-  - ISO-8859-2
-  - IBM852
-  - MAC-CENTRALEUROPE
-- Slovene
-  - ISO-8859-2
-  - ISO-8859-16
-  - Windows-1250
-  - IBM852
-  - M
+## Install
 
-## Example
+```bash
+pip install cchardet
+```
+
+Pre-built wheels are available for Python 3.9–3.14 (including free-threaded 3.14t) on Linux, macOS, and Windows. See [Releases](https://github.com/BrunoNyland/cChardet/releases).
+
+## Usage
 
 ```python
 import cchardet as chardet
-with open(r"tests/samples/wikipediaJa_One_Thousand_and_One_Nights_SJIS.txt", "rb") as f:
-  msg = f.read()
-  result = chardet.detect(msg)
-  print(result)
+
+with open("example.txt", "rb") as f:
+    result = chardet.detect(f.read())
+    print(result)
+    # {'encoding': 'SHIFT_JIS', 'confidence': 0.99}
+```
+
+Streaming detection via `UniversalDetector`:
+
+```python
+from cchardet import UniversalDetector
+
+detector = UniversalDetector()
+with open("example.txt", "rb") as f:
+    for line in f:
+        detector.feed(line)
+        if detector.done:
+            break
+detector.close()
+print(detector.result)
+```
+
+Command-line tool:
+
+```bash
+cchardetect example.txt
+# example.txt: SHIFT_JIS with confidence 0.99
 ```
 
 ## Benchmark
 
+| Detector            | Calls/s |
+|---------------------|---------|
+| chardet v5.2.0      | ~1      |
+| cchardet v2.2.0a6   | ~2200   |
+
+Run your own:
+
 ```bash
-$ python setup.py build_ext -i -f
-$ python tests/bench.py
+pip install -r requirements-dev.txt
+make test
+make bench
 ```
 
-### Results
+## How it works
 
-CPU: AMD Ryzen 9 7950X3D
+- **[uchardet](https://github.com/PyYoshi/uchardet)** — C++ charset detector (Mozilla-derived), the encoding engine.
+- **cChardet** — Cython binding that exposes `detect()` and `UniversalDetector` to Python.
+- **[chardet](https://github.com/chardet/chardet)** — pure-Python detector used as the benchmark baseline; cChardet is API-compatible as a drop-in replacement.
 
-RAM: DDR5-5600MT/s 96GB
+## Supported encodings
 
-Platform: Ubuntu 24.04 amd64
+UTF-8, UTF-16BE/LE, UTF-32BE/LE, ISO-8859-1 through -16, WINDOWS-1250 through -1257, BIG5, EUC-JP/ KR/ TW, GB18030, HZ-GB-2312, ISO-2022-JP/ KR/ CN, SHIFT_JIS, KOI8-R, and more — covering 30+ languages.
 
-#### Python 3.12.3
+## License
 
-|                   | Request (call/s) |
-|-------------------|------------------|
-| chardet v5.2.0    | 1.1              |
-| cchardet v2.2.0a1 | 2263.6           |
+See [COPYING](COPYING). MPL 1.1 / GPL / LGPL (dual-licensed via uchardet).
 
-## LICENSE
+## Links
 
-See **COPYING** file.
-
-## Contact
-
-- [Issues](https://github.com/PyYoshi/cChardet/issues?page=1&state=open)
-
-## Support Platforms
-
-- Windows i686, x86_64
-- Linux i686, x86_64
-- macOS x86_64
+- [Releases](https://github.com/BrunoNyland/cChardet/releases)
+- [Issues](https://github.com/BrunoNyland/cChardet/issues)
+- [uchardet (C++ engine)](https://github.com/PyYoshi/uchardet)
+- [chardet (pure-Python)](https://github.com/chardet/chardet)
