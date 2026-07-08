@@ -3,10 +3,15 @@
 [![PyPI version](https://badge.fury.io/py/cchardet.svg)](https://badge.fury.io/py/cchardet)
 [![Tests](https://github.com/BrunoNyland/cChardet/actions/workflows/test.yml/badge.svg)](https://github.com/BrunoNyland/cChardet/actions/workflows/test.yml)
 [![Release](https://github.com/BrunoNyland/cChardet/actions/workflows/release.yaml/badge.svg)](https://github.com/BrunoNyland/cChardet/actions/workflows/release.yaml)
+[![Python](https://img.shields.io/badge/python-3.13%20%7C%203.14-blue.svg)](https://www.python.org/)
+[![License](https://img.shields.io/badge/license-MPL%2FGPL%2FLGPL-orange.svg)](COPYING)
+[![Platforms](https://img.shields.io/badge/platforms-Linux%20%7C%20macOS%20%7C%20Windows-green.svg)](https://github.com/BrunoNyland/cChardet/releases)
 
 High-speed universal character encoding detector -- a Python binding to [uchardet](https://github.com/PyYoshi/uchardet), built with [Cython](https://cython.org/).
 
 A C++-powered drop-in alternative to [chardet](https://github.com/chardet/chardet), offering **~2000x** faster detection.
+
+> **Note:** This is a maintained fork of [PyYoshi/cChardet](https://github.com/PyYoshi/cChardet), updated for Python 3.13-3.14 with C++14 and automated releases.
 
 ## Install
 
@@ -82,5 +87,6 @@ See [COPYING](COPYING). MPL 1.1 / GPL / LGPL (dual-licensed via uchardet).
 
 - [Releases](https://github.com/BrunoNyland/cChardet/releases)
 - [Issues](https://github.com/BrunoNyland/cChardet/issues)
+- [Original repo (PyYoshi/cChardet)](https://github.com/PyYoshi/cChardet)
 - [uchardet (C++ engine)](https://github.com/PyYoshi/uchardet)
 - [chardet (pure-Python)](https://github.com/chardet/chardet)
